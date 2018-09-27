@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "pronaid-release",
+    "release": "pronaid-release",
+    "develop": "pronaid-develop"
   }
 }
