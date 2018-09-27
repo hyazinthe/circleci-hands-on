@@ -29,7 +29,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: node_modules/.bin/firebase deploy --project="pronaid-release" --token="$FIREBASE_TOKEN" --interactive
+      - run: node_modules/.bin/firebase deploy --project="pronaid-release" --token="$FIREBASE_TOKEN" --no-localhost 
 
 workflows:
   version: 2
