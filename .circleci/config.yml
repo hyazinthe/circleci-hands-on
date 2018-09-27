@@ -21,8 +21,11 @@ jobs:
           name: Install firebase tools
           command: npm install -g firebase-tools
       - run:
+          name: Deployment prepare
+          command: firebase use develop --token=$FIREBASE_TOKEN      
+      - run:
           name: Deployment
-          command: firebase deploy --project=$FIREBASE_PJ_RELEASE --token=$FIREBASE_TOKEN
+          command: firebase deploy --token=$FIREBASE_TOKEN
       - save_cache: 
           key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
