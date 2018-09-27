@@ -31,6 +31,13 @@ jobs:
           at: .
       - run: node_modules/.bin/firebase deploy --project="pronaid-release-1aabb" --token="$FIREBASE_TOKEN"
 
+ deployDev:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run: node_modules/.bin/firebase deploy --project="pronaid-develop-a3a40" --token="$FIREBASE_TOKEN"
+
 workflows:
   version: 2
   build-and-deploy:
@@ -43,3 +50,16 @@ workflows:
             branches:
               only:
                 - master
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deployDev:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
