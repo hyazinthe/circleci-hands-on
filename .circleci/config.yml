@@ -17,24 +17,11 @@ jobs:
       - run:
           name: Check dist
           command: ls -la dist
+
+      - run:
+          name: Deployment
+          command: firebase deploy --token=$FIREBASE_TOKEN --non-interactive  
       - save_cache: 
           key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/workspace/node_modules
-deploy:
-  production:
-    branch: master
-    commands:
-      - firebase deploy --token=$FIREBASE_TOKEN --non-interactive  
-
-workflows:
-  version: 2
-  build_and_deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-        filters:
-          branches:
-            only: master
