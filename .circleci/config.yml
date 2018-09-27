@@ -29,7 +29,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: node_modules/.bin/firebase deploy --project=$(FIREBASE_PJ_RELEASE) --token=$(FIREBASE_TOKEN)
+      - run: firebase use release
+      - run: node_modules/.bin/firebase deploy --token="$FIREBASE_TOKEN"
 
 workflows:
   version: 2
