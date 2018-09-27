@@ -18,8 +18,8 @@ jobs:
           name: Check dist
           command: ls -la dist
       - run:
-        name: Install firebase tools
-        command: yarn add -g firebase-tools
+          name: Install firebase tools
+          command: yarn add -g firebase-tools
       - run:
           name: Deployment
           command: firebase deploy --project "$FIREBASE_PJ_RELEASE" --token=$FIREBASE_TOKEN --non-interactive  
