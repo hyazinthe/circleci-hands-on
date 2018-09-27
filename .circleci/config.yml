@@ -31,7 +31,7 @@ jobs:
           at: .
       - run: node_modules/.bin/firebase deploy --project="pronaid-release-1aabb" --token="$FIREBASE_TOKEN"
 
- deployDev:
+  deployDev:
     <<: *defaults
     steps:
       - attach_workspace:
