@@ -1,32 +1,45 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node:10.9.0
+  working_directory: ~/repo
+
 version: 2
 jobs:
   build:
-    working_directory: ~/workspace 
-    docker:
-      - image: node:9.4.0
+    <<: *defaults
     steps:
       - checkout
-      - restore_cache: 
-          key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: Install dependencies
-          command: yarn
-      - run:
-          name: Build
-          command: yarn build
-      - run:
-          name: Check dist
-          command: ls -la dist
-      - run:
-          name: Install firebase tools
-          command: npm install -g firebase-tools
-      - run:
-          name: Deployment prepare
-          command: firebase use develop --token=$FIREBASE_TOKEN      
-      - run:
-          name: Deployment
-          command: firebase deploy --token=$FIREBASE_TOKEN
-      - save_cache: 
-          key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: yarn install
+      - save_cache:
           paths:
-            - ~/workspace/node_modules
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: yarn run build
+      - persist_to_workspace:
+          root: .
+          paths: [ '*' ]
+
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run: node_modules/.bin/firebase deploy --token="$FIREBASE_TOKEN"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
