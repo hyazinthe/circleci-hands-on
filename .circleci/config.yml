@@ -21,3 +21,8 @@ jobs:
           key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/workspace/node_modules
+    deployment:
+      production:
+        branch: master
+        commands:
+          - firebase deploy --token=$FIREBASE_TOKEN --non-interactive
