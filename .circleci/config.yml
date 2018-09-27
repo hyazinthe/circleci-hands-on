@@ -24,12 +24,3 @@ jobs:
           key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/workspace/node_modules
-deploy:
-    dependencies:
-    override:
-        - npm install -g firebase-tools
-    deployment:
-    deploy:
-        branch: master
-        commands:
-        - firebase deploy --project "$FIREBASE_PJ_RELEASE" --token "$FIREBASE_TOKEN"
